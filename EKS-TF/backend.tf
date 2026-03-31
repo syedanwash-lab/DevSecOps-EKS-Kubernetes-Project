@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "dev-harshal-tf-bucket-123"
+    bucket         = "anvash-tf-bucket"
     region         = "us-east-1"
     key            = "EKS/terraform.tfstate"        # ← Different key than Jenkins!
     encrypt        = true
