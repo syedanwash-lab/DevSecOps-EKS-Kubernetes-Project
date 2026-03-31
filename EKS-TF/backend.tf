@@ -2,10 +2,11 @@ terraform {
   backend "s3" {
     bucket         = "anvash-tf-bucket"
     region         = "us-east-1"
-    key            = "EKS/terraform.tfstate"        # ← Different key than Jenkins!
+    key            = "EKS/terraform.tfstate"
     encrypt        = true
-    dynamodb_table = "dev-harshal-tf-dynamodb"
+    dynamodb_table = "anvash-tf-dynamodb"
   }
+}
 
   required_version = ">=1.5.7"
 
