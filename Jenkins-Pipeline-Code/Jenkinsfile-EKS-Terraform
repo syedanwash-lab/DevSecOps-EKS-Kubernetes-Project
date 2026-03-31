@@ -10,49 +10,48 @@ pipeline {
     stages {
         stage('Checkout from Git') {
             steps {
-                git branch: 'master', url: 'https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-DevSecOps-Tetris-Project.git'
+                git branch: 'master', url: 'https://github.com/syedanwash-lab/DevSecOps-EKS-Kubernetes-Project.git'
             }
         }
         stage('Initializing Terraform') {
             steps {
                 withAWS(credentials: 'aws-key', region: 'us-east-1') {
-                dir('EKS-TF') {
-                    script {
-                        sh 'terraform init'
+                    dir('EKS-TF') {
+                        script {
+                            sh 'terraform init'
+                        }
                     }
-                }
                 }
             }
         }
         stage('Validate Terraform Code') {
             steps {
                 withAWS(credentials: 'aws-key', region: 'us-east-1') {
-                dir('EKS-TF') {
-                    script {
-                        sh 'terraform validate'
+                    dir('EKS-TF') {
+                        script {
+                            sh 'terraform validate'
+                        }
                     }
-                }
                 }
             }
         }
         stage('Terraform Plan') {
             steps {
                 withAWS(credentials: 'aws-key', region: 'us-east-1') {
-                dir('EKS-TF') {
-                    script {
-                        sh "terraform plan -var-file=${params.'File-Name'}"
+                    dir('EKS-TF') {
+                        script {
+                            sh "terraform plan -var-file=${params.'File-Name'}"
+                        }
                     }
-                }
                 }
             }
         }
         stage('Terraform Action') {
             steps {
                 withAWS(credentials: 'aws-key', region: 'us-east-1') {
-                script {
-                    echo "${params.'Terraform-Action'}"
-                    dir('EKS-TF') {
-                        script {
+                    script {
+                        echo "${params.'Terraform-Action'}"
+                        dir('EKS-TF') {
                             if (params.'Terraform-Action' == 'plan') {
                                 sh "terraform plan -var-file=${params.'File-Name'}"
                             } else if (params.'Terraform-Action' == 'apply') {
@@ -64,7 +63,6 @@ pipeline {
                             }
                         }
                     }
-                }
                 }
             }
         }
