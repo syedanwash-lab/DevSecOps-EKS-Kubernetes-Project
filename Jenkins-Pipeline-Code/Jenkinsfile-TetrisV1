@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Checkout from Git') {
             steps {
-                git branch: 'master', url: 'https://github.com/Harshalx07/End-to-End-Kubernetes-DevSecOps-Tetris-Project.git'
+                git branch: 'master', url: 'https://github.com/syedanwash-lab/DevSecOps-EKS-Kubernetes-Project.git'
             }
         }
         stage('Sonarqube Analysis') {
@@ -72,33 +72,33 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
-                        sh 'docker tag tetrisv1 harshalx07/tetrisv1:${BUILD_NUMBER}'
-                        sh 'docker push harshalx07/tetrisv1:${BUILD_NUMBER}'
+                        sh 'docker tag tetrisv1 anvash11/tetrisv1:${BUILD_NUMBER}'
+                        sh 'docker push anvash11/tetrisv1:${BUILD_NUMBER}'
                     }
                 }
             }
         }
         stage("TRIVY Image Scan") {
             steps {
-                sh 'trivy image harshalx07/tetrisv1:${BUILD_NUMBER} > trivyimage.txt'
+                sh 'trivy image anvash11/tetrisv1:${BUILD_NUMBER} > trivyimage.txt'
             }
         }
         stage('Checkout Code') {
             steps {
-                git branch: 'master', url: 'https://github.com/Harshalx07/End-to-End-Kubernetes-DevSecOps-Tetris-Project.git'
+                git branch: 'master', url: 'https://github.com/syedanwash-lab/DevSecOps-EKS-Kubernetes-Project.git'
             }
         }
         stage('Update Deployment file') {
             environment {
-                GIT_REPO_NAME = "End-to-End-Kubernetes-DevSecOps-Tetris-Project"
-                GIT_USER_NAME = "Harshalx07"
+                GIT_REPO_NAME = "DevSecOps-EKS-Kubernetes-Project"
+                GIT_USER_NAME = "syedanwash-lab"
             }
             steps {
                 dir('Manifest-file') {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
-                            git config user.email "harshalgalande9@gmail.com"
-                            git config user.name "Harshalx07"
+                            git config user.email "syed.anwash@gmail.com"
+                            git config user.name "syedanwash-lab"
                             BUILD_NUMBER=${BUILD_NUMBER}
                             echo $BUILD_NUMBER
                             imageTag=$(grep -oP '(?<=tetrisv1:)[^ ]+' deployment-service.yml)
